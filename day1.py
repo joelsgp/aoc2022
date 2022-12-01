@@ -12,4 +12,7 @@ for li in lines:
         current_sum = 0
 
 
-print(max(sums))
+sums.sort(reverse=True)
+top3 = sums[:3]
+total = sum(top3)
+print(total)
