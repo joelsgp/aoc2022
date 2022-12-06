@@ -4,8 +4,6 @@ from pathlib import Path
 from typing import Callable
 from sys import stderr
 
-import solutions
-
 try:
     import pyperclip
 except ImportError:
@@ -24,7 +22,7 @@ Lines = list[str]
 def get_parser() -> ArgumentParser:
     parser = ArgumentParser()
 
-    parser.add_argument('day', type=int, required=False)
+    parser.add_argument('day', type=int, nargs='?')
     parser.add_argument('-c', '--copy', action='store_false', help='Copy solution to clipboard')
 
     return parser
@@ -49,9 +47,10 @@ def current_day() -> int:
 
 def retrieve_solver(filename: str) -> Callable:
     try:
-        module = getattr(solutions, filename)
-    except AttributeError as error:
-        raise AttributeError("Solution doesn't exist!") from error
+        solutions = __import__(f'solutions.{filename}')
+    except ImportError as error:
+        raise ValueError(f"Solution {filename} doesn't exist!") from error
+    module = getattr(solutions, filename)
 
     return module.solve
 
@@ -79,3 +78,7 @@ def main():
         else:
             pyperclip.copy(solution)
     print(solution)
+
+
+if __name__ == '__main__':
+    main()
