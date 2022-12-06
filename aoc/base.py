@@ -3,7 +3,7 @@ import pyperclip
 
 
 class Solution:
-    input_dir = Path('input')
+    input_dir = Path('../input')
     input_name = 'input'
 
     def __init__(self, day: int):
