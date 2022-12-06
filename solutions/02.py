@@ -7,46 +7,52 @@ class Choice(IntEnum):
     SCISSORS = 3
 
 
-MAPPING_YOU = {
+class Outcome(IntEnum):
+    LOSE = 0
+    DRAW = 3
+    WIN = 6
+
+
+MAPPING_OPPONENT = {
     'A': Choice.ROCK,
     'B': Choice.PAPER,
     'C': Choice.SCISSORS
 }
-MAPPING_OPPONENT = {
-    'X': Choice.ROCK,
-    'Y': Choice.PAPER,
-    'Z': Choice.SCISSORS
+MAPPING_OUTCOME = {
+    'X': Outcome.LOSE,
+    'Y': Outcome.DRAW,
+    'Z': Outcome.WIN
 }
 LOSING_PAIRS = (
+    # (lose, win)
     (Choice.ROCK, Choice.PAPER),
     (Choice.PAPER, Choice.SCISSORS),
     (Choice.SCISSORS, Choice.ROCK)
 )
 
 
-def get_win_score(you: Choice, opponent: Choice) -> int:
-    # draw
-    if you == opponent:
-        return 3
-
-    # lose
-    for pair in LOSING_PAIRS:
-        if pair == (you, opponent):
-            return 0
-
-    # waynerWin
-    return 6
-
-
-def get_round_score(you: Choice, opponent: Choice) -> int:
-    win_score = get_win_score(you, opponent)
-    return you + win_score
+def get_your_move(opponent: Choice, outcome: Outcome) -> Choice:
+    if outcome == Outcome.DRAW:
+        return opponent
+    if outcome == Outcome.WIN:
+        for lose, win in LOSING_PAIRS:
+            if lose == opponent:
+                return win
+    if outcome == Outcome.LOSE:
+        for lose, win in LOSING_PAIRS:
+            if win == opponent:
+                return lose
 
 
-def parse_line(li: str) -> tuple[Choice, Choice]:
+def get_round_score(opponent: Choice, outcome: Outcome) -> int:
+    you = get_your_move(opponent, outcome)
+    return you + outcome
+
+
+def parse_line(li: str) -> tuple[Choice, Outcome]:
     both = li.split()
-    you = MAPPING_YOU[both[0]]
-    opponent = MAPPING_OPPONENT[both[1]]
+    you = MAPPING_OPPONENT[both[0]]
+    opponent = MAPPING_OUTCOME[both[1]]
 
     return you, opponent
 
@@ -54,8 +60,8 @@ def parse_line(li: str) -> tuple[Choice, Choice]:
 def solve(lines):
     total = 0
     for li in lines:
-        opponent, you = parse_line(li)
-        round_score = get_round_score(you, opponent)
+        opponent, outcome = parse_line(li)
+        round_score = get_round_score(opponent, outcome)
         total += round_score
 
     return total
