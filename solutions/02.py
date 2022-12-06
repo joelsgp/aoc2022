@@ -10,29 +10,35 @@ class Choice(IntEnum):
 MAPPING_YOU = {
     'A': Choice.ROCK,
     'B': Choice.PAPER,
-    'C': Choice.SCISSORS,
+    'C': Choice.SCISSORS
 }
 MAPPING_OPPONENT = {
     'X': Choice.ROCK,
     'Y': Choice.PAPER,
-    'Z': Choice.SCISSORS,
+    'Z': Choice.SCISSORS
 }
+LOSING_PAIRS = (
+    (Choice.ROCK, Choice.PAPER),
+    (Choice.PAPER, Choice.SCISSORS),
+    (Choice.SCISSORS, Choice.ROCK)
+)
 
 
 def get_win_score(you: Choice, opponent: Choice) -> int:
+    # draw
     if you == opponent:
         return 3
-    elif you == Choice.ROCK and opponent == Choice.PAPER:
-        return 0
-    elif you == Choice.PAPER and opponent == Choice.SCISSORS:
-        return 0
-    elif you == Choice.SCISSORS and opponent == Choice.ROCK:
-        return 0
-    else:
-        return 6
+
+    # lose
+    for pair in LOSING_PAIRS:
+        if pair == (you, opponent):
+            return 0
+
+    # waynerWin
+    return 6
 
 
-def get_match_score(you: Choice, opponent: Choice) -> int:
+def get_round_score(you: Choice, opponent: Choice) -> int:
     win_score = get_win_score(you, opponent)
     return you + win_score
 
@@ -48,7 +54,8 @@ def parse_line(li: str) -> tuple[Choice, Choice]:
 def solve(lines):
     total = 0
     for li in lines:
-        you, opponent = parse_line(li)
-        total += get_match_score(you, opponent)
+        opponent, you = parse_line(li)
+        round_score = get_round_score(you, opponent)
+        total += round_score
 
     return total
