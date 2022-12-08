@@ -76,7 +76,7 @@ def main():
         if pyperclip is None:
             print("pyperclip isn't installed, won't copy solution", file=stderr)
         else:
-            pyperclip.copy(solution)
+            pyperclip.copy(str(solution))
     print(solution)
 
 
