@@ -23,7 +23,7 @@ def parse_stacks(stack_count: int, stack_size: int, lines: list[str]) -> list[by
     for li in lines[:stack_size]:
         for i in range(stack_count):
             # 4 is the separation between each stack item in the string
-            stack_entry = li[1 + 4*1]
+            stack_entry = li[1 + 4*i]
             if stack_entry != ' ':
                 stacks[i].append(ord(stack_entry))
 
