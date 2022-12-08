@@ -46,12 +46,14 @@ def get_puzzle_output(stacks: list[bytearray]) -> str:
     return out
 
 
+# noinspection PyPep8Naming
 def CrateMover9000(num: int, source: int, dest: int, stacks: list[bytearray]):
     for _ in range(num):
         hold = stacks[source - 1].pop()
         stacks[dest - 1].append(hold)
 
 
+# noinspection PyPep8Naming
 def CrateMover9001(num: int, source: int, dest: int, stacks: list[bytearray]):
     hold = stacks[source - 1][-num:]
     del stacks[source - 1][-num:]
