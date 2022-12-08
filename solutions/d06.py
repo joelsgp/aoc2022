@@ -1,4 +1,4 @@
-MARKER_SIZE = 4
+MARKER_SIZE = 14
 
 
 def solve(lines):
