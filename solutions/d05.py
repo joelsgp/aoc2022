@@ -1,3 +1,9 @@
+import re
+
+
+INSTRUCTION_RE = re.compile(r'move \d+ from \d+ to \d+')
+
+
 def parse_input_bounds(lines: list[str]) -> tuple[int, int]:
     stack_count, stack_size = None, None
 
@@ -30,7 +36,26 @@ def parse_stacks(stack_count: int, stack_size: int, lines: list[str]) -> list[by
     return stacks
 
 
+def get_puzzle_output(stacks: list[bytearray]) -> str:
+    out_list = []
+    for s in stacks:
+        top = s.pop()
+        out_list.append(chr(top))
+
+    out = ''.join(out_list)
+    return out
+
+
 def solve(lines):
     stack_count, stack_size = parse_input_bounds(lines)
     stacks = parse_stacks(stack_count, stack_size, lines)
-    print(stacks)
+
+    for li in lines[stack_size + 2:]:
+        m = INSTRUCTION_RE.fullmatch(li)
+        num, source, dest = (int(g) for g in m.groups())
+        for i in range(num):
+            hold = stacks[source - 1].pop()
+            stacks[dest - 1] .append(hold)
+
+    out = get_puzzle_output(stacks)
+    return out
