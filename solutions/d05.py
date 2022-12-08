@@ -26,7 +26,7 @@ def parse_input_bounds(lines: list[str]) -> tuple[int, int]:
 
 def parse_stacks(stack_count: int, stack_size: int, lines: list[str]) -> list[bytearray]:
     stacks = [bytearray() for _ in range(stack_count)]
-    for li in lines[:stack_size]:
+    for li in reversed(lines[:stack_size]):
         for i in range(stack_count):
             # 4 is the separation between each stack item in the string
             stack_entry = li[1 + 4*i]
@@ -52,8 +52,8 @@ def solve(lines):
 
     for li in lines[stack_size + 2:]:
         m = INSTRUCTION_RE.fullmatch(li)
-        gs = [int(g) for g in m.groups()]
-        num, source, dest = gs[0], gs[1], gs[2]
+        num, source, dest = (int(g) for g in m.groups())
+
         for i in range(num):
             hold = stacks[source - 1].pop()
             stacks[dest - 1] .append(hold)
