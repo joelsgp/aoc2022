@@ -4,9 +4,9 @@ OFFSET_UPPER = 27 - ord('A')
 
 def get_priority(item: str) -> int:
     if item.islower():
-        return ord(item) - OFFSET_LOWER
+        return ord(item) + OFFSET_LOWER
     elif item.isupper():
-        return ord(item) - OFFSET_UPPER
+        return ord(item) + OFFSET_UPPER
 
 
 def get_duplicate(rucksack: str) -> str:
