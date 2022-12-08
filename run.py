@@ -65,7 +65,7 @@ def main():
 
     if args.day is None:
         args.day = current_day()
-    filename = FILENAME_FORMAT.format(args.day)
+    filename = FILENAME_FORMAT.format(day=args.day)
 
     solve = retrieve_solver(filename)
     lines = load_lines(filename)
