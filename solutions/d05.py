@@ -52,6 +52,12 @@ def CrateMover9000(num: int, source: int, dest: int, stacks: list[bytearray]):
         stacks[dest - 1].append(hold)
 
 
+def CrateMover9001(num: int, source: int, dest: int, stacks: list[bytearray]):
+    hold = stacks[source - 1][-num:]
+    del stacks[source - 1][-num:]
+    stacks[dest - 1].extend(hold)
+
+
 def solve(lines):
     stack_count, stack_size = parse_input_bounds(lines)
     stacks = parse_stacks(stack_count, stack_size, lines)
@@ -59,7 +65,7 @@ def solve(lines):
     for li in lines[stack_size + 2:]:
         m = INSTRUCTION_RE.fullmatch(li)
         num, source, dest = (int(g) for g in m.groups())
-        CrateMover9000(num, source, dest, stacks)
+        CrateMover9001(num, source, dest, stacks)
 
     out = get_puzzle_output(stacks)
     return out
