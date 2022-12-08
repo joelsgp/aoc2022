@@ -15,6 +15,7 @@ except ImportError:
 
 INPUTS_DIR_NAME = 'inputs'
 INPUT_SUFFIX = '.txt'
+FILENAME_FORMAT = '{day:02}'
 # when problems are released, relative to UTC
 RELEASE_OFFSET = timedelta(hours=-3)
 RELEASE_TZ = timezone(RELEASE_OFFSET)
@@ -58,17 +59,13 @@ def retrieve_solver(filename: str) -> Callable:
     return module.solve
 
 
-def format_filename(day: int) -> str:
-    return f'{day:02}'
-
-
 def main():
     parser = get_parser()
     args = parser.parse_args()
 
     if args.day is None:
         args.day = current_day()
-    filename = format_filename(args.day)
+    filename = FILENAME_FORMAT.format(args.day)
 
     solve = retrieve_solver(filename)
     lines = load_lines(filename)
