@@ -15,7 +15,7 @@ except ImportError:
 
 INPUTS_DIR_NAME = 'inputs'
 INPUT_SUFFIX = '.txt'
-FILENAME_FORMAT = '{day:02}'
+FILENAME_FORMAT = 'd{day:02}'
 # when problems are released, relative to UTC
 RELEASE_OFFSET = timedelta(hours=-3)
 RELEASE_TZ = timezone(RELEASE_OFFSET)
