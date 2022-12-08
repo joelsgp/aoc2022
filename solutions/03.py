@@ -1,5 +1,9 @@
+from functools import reduce
+
+
 OFFSET_LOWER = 1 - ord('a')
 OFFSET_UPPER = 27 - ord('A')
+GROUP_SIZE = 3
 
 
 def get_priority(item: str) -> int:
@@ -21,11 +25,28 @@ def get_duplicate(rucksack: str) -> str:
     return duplicate
 
 
-def solve(lines):
+def solve1(lines):
     total_priorities = 0
     for rucksack in lines:
         duplicate = get_duplicate(rucksack)
         dupe_priority = get_priority(duplicate)
+        total_priorities += dupe_priority
+
+    return total_priorities
+
+
+def intersection(x: set, y: set) -> set:
+    return x.intersection(y)
+
+
+def solve(lines):
+    total_priorities = 0
+    for i in range(0, len(lines), GROUP_SIZE):
+        group = lines[i:i + GROUP_SIZE]
+        group_sets = [set(s) for s in group]
+        dupe_set = reduce(intersection, group_sets)
+        dupe = dupe_set.pop()
+        dupe_priority = get_priority(dupe)
         total_priorities += dupe_priority
 
     return total_priorities
