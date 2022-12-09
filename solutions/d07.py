@@ -10,6 +10,10 @@ RE_COMMAND_CD = compile(r'\$ cd (.+)')
 RE_OUTPUT_DIR = compile('dir (.+)')
 RE_OUTPUT_FILE = compile('([0-9]+) (.+)')
 
+TOTAL_MAX_SIZE = 100_000
+DISK_SIZE = 70_000_000
+SPACE_REQUIRED = 30_000_000
+
 
 class Node:
     def __init__(self, name: str, parent: Optional[Directory]):
@@ -59,7 +63,7 @@ def process_ls(output: Lines, pwd: Directory):
             name = m[1]
             Directory(name, pwd)
         elif m := RE_OUTPUT_FILE.fullmatch(line):
-            size = m[1]
+            size = int(m[1])
             name = m[2]
             File(name, pwd, size)
 
@@ -100,5 +104,5 @@ def get_total(pwd: Directory, total: int, maximum: int) -> int:
 
 def solve(lines):
     root = make_tree(lines)
-    total = get_total(root, 0, 100_000)
+    total = get_total(root, 0, TOTAL_MAX_SIZE)
     return total
