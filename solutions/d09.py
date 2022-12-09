@@ -34,17 +34,19 @@ def snake(h: Coord, t: Coord) -> Coord:
     diffx = h[0] - t[0]
     diffy = h[1] - t[1]
 
-    diff_abs = [abs(diffx), abs(diffy)]
+    adiffx = abs(diffx)
+    adiffy = abs(diffy)
+    diff_abs = [adiffx, adiffy]
     diff_abs.sort()
-    # none
-    if diff_abs in ([0, 0], [0, 1], [1, 1]):
-        move = (0, 0)
     # linear
-    elif diff_abs == [0, 2]:
+    if diff_abs == [0, 2]:
         move = (diffx // 2, diffy // 2)
+    # none
+    elif sum(diff_abs) <= 2:
+        move = (0, 0)
     # diagonal
     else:
-        move = (diffx // abs(diffx), diffy // abs(diffy))
+        move = (diffx // adiffx, diffy // adiffy)
 
     t = add_coords(t, move)
     return t
