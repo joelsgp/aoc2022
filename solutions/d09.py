@@ -40,7 +40,7 @@ def snake(h: Coord, t: Coord) -> Coord:
         move = (diffx // 2, diffy // 2)
     # diagonal
     elif diff_abs == [1, 2]:
-        move = (diffx % 2, diffy % 2)
+        move = (diffx // abs(diffx), diffy // abs(diffy))
     else:
         move = (0, 0)
 
@@ -89,9 +89,9 @@ def solve(lines):
         distance = int(m[2])
 
         for _ in range(distance):
-            print(draw(h, t))
-            print('-----')
-            input()
+            # print(draw(h, t))
+            # print('-----')
+            # input()
             h = add_coords(h, direction)
             t = snake(h, t)
             cache_visited(t, cache)
