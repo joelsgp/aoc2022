@@ -12,7 +12,12 @@ def solve(lines):
             # for each tree
             current_height = lines[y][x]
             ok = False
-            for deltax, deltay in product((-1, 1), repeat=2):
+            for deltax, deltay in (
+                (0, 1),
+                (0, -1),
+                (1, 0),
+                (-1, 0)
+            ):
                 # for each line of sight
                 searchx = x + deltax
                 searchy = y + deltay
@@ -27,6 +32,7 @@ def solve(lines):
 
                 if ok:
                     total_visible += 1
+                    print(x, y)
                     break
 
     return total_visible
