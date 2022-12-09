@@ -1,18 +1,32 @@
+from itertools import product
+
+
 def solve(lines):
     total_visible = 0
 
     grid_height = len(lines)
     grid_width = len(lines[0])
-    visibility_grid = [[None] * grid_width for _ in range(grid_height)]
-    for i in (0, -1):
-        visibility_grid[i] = [True] * grid_width
-        for row in visibility_grid:
-            row[i] = True
-    total_visible += grid_height * 2 + grid_width * 2 - 4
 
-    for step in 1, -1:
     for x in range(grid_width):
-        for y in range(1, grid_height, 1):
+        for y in range(grid_height):
+            # for each tree
+            current_height = lines[y][x]
+            ok = False
+            for deltax, deltay in product((-1, 1), repeat=2):
+                # for each line of sight
+                searchx = x + deltax
+                searchy = y + deltay
+                while 0 <= searchx < grid_width and 0 <= searchy < grid_height:
+                    search_height = lines[searchy][searchx]
+                    if current_height <= search_height:
+                        break
+                    searchx += deltax
+                    searchy += deltay
+                else:
+                    ok = True
 
+                if ok:
+                    total_visible += 1
+                    break
 
     return total_visible
