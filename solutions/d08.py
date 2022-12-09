@@ -19,17 +19,18 @@ def solve(lines):
                 (-1, 0)
             ):
                 # for each line of sight
-                viewing_distance = 1
+                viewing_distance = 0
 
                 searchx = x + deltax
                 searchy = y + deltay
                 while 0 <= searchx < grid_width and 0 <= searchy < grid_height:
+                    viewing_distance += 1
                     search_height = lines[searchy][searchx]
                     if current_height <= search_height:
                         break
                     searchx += deltax
                     searchy += deltay
-                    viewing_distance += 1
+
                 the_scores_four.append(viewing_distance)
 
             current_score = prod(the_scores_four)
