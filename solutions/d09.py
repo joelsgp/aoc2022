@@ -41,6 +41,8 @@ def snake(h: Coord, t: Coord) -> Coord:
     # diagonal
     elif diff_abs == [1, 2]:
         move = (diffx % 2, diffy % 2)
+    else:
+        move = (0, 0)
 
     t = add_coords(t, move)
     return t
