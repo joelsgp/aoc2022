@@ -14,7 +14,8 @@ DIRECTION_VECTORS = {
 
 
 def cache_visited(t: Coord, cache: VisitedCache):
-    cache[t[0]][t[1]] = True
+    cache.setdefault(t[0], {})
+    cache[t[0]].setdefault(t[1], True)
 
 
 def count_visited(cache: VisitedCache) -> int:
@@ -47,8 +48,7 @@ def solve(lines):
         distance = int(m[2])
 
         for _ in range(distance):
-            h[0] += direction[0]
-            h[1] += direction[1]
+            h = (h[0] + direction[0], h[1] + direction[1])
             t = snake(h, t)
             cache_visited(t, cache)
 
