@@ -11,6 +11,7 @@ DIRECTION_VECTORS = {
     'L': (-1, 0),
     'R': (1, 0)
 }
+ROPE_NODES = 10
 
 
 def cache_visited(t: Coord, cache: VisitedCache):
@@ -79,9 +80,8 @@ def draw(h: Coord, t: Coord) -> str:
 def solve(lines):
     cache = {}
 
-    h = (0, 0)
-    t = (0, 0)
-    cache_visited(t, cache)
+    rope = [(0, 0) for _ in range(ROPE_NODES)]
+    cache_visited(rope[-1], cache)
 
     for step in lines:
         m = RE_STEP.fullmatch(step)
@@ -89,12 +89,13 @@ def solve(lines):
         distance = int(m[2])
 
         for _ in range(distance):
-            # print(draw(h, t))
-            # print('-----')
-            # input()
-            h = add_coords(h, direction)
-            t = snake(h, t)
-            cache_visited(t, cache)
+            rope[0] = add_coords(rope[0], direction)
+            for i in range(ROPE_NODES - 1):
+                ih = i
+                it = i + 1
+                rope[it] = snake(rope[ih], rope[it])
+
+            cache_visited(rope[-1], cache)
 
     visited = count_visited(cache)
     return visited
