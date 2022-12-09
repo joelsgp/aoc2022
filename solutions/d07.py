@@ -6,7 +6,6 @@ from typing import Optional
 
 Lines = list[str]
 
-RE_COMMAND_LS = compile(r'\$ ls')
 RE_COMMAND_CD = compile(r'\$ cd (.+)')
 RE_OUTPUT_DIR = compile('dir (.+)')
 RE_OUTPUT_FILE = compile('([0-9]+) (.+)')
@@ -60,14 +59,14 @@ def process_ls(output: Lines, pwd: Directory):
 
 
 def process_command(command: str, output: Lines, pwd: Directory, root: Directory) -> Directory:
-    if m := RE_COMMAND_CD.fullmatch(command):
-        pwd = process_cd(m[1], pwd, root)
-    elif RE_COMMAND_LS.fullmatch(command):
+    if command == '$ ls':
         process_ls(output, pwd)
+    elif m := RE_COMMAND_CD.fullmatch(command):
+        pwd = process_cd(m[1], pwd, root)
     return pwd
 
 
-def solve(lines):
+def make_tree(lines: Lines) -> Directory:
     root = Directory('', None)
     pwd = root
 
@@ -80,3 +79,9 @@ def solve(lines):
             output = []
         else:
             output.append(li)
+
+    return root
+
+
+def solve(lines):
+    root = make_tree(lines)
