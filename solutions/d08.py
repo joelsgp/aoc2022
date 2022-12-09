@@ -10,11 +10,9 @@ def solve(lines):
             row[i] = True
     total_visible += grid_height * 2 + grid_width * 2 - 4
 
-    for y, row in enumerate(lines):
-        # currently hitting the grid[y]
-        visibility_row = visibility_grid[y]
+    for step in 1, -1:
+    for x in range(grid_width):
+        for y in range(1, grid_height, 1):
 
-        for x, column in enumerate(row):
-            pass
 
     return total_visible
