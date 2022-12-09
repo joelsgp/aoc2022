@@ -27,10 +27,14 @@ def snake(h: Coord, t: Coord) -> Coord:
     diffx = h[0] - t[0]
     diffy = h[1] - t[1]
 
-    flag = abs(diffx) + abs(diffy)
+    diff_abs = [abs(diffx), abs(diffy)]
+    diff_abs.sort()
     # linear
-    if flag in (1, 3):
+    if diff_abs == [0, 1]:
         t = (t[0] - diffx//2, t[1] - diffy//2)
+    # diagonal
+    elif diff_abs == [1, 2]:
+        t = (t[0] - diffx % 2, t[1] - diffy % 2)
 
     return t
 
