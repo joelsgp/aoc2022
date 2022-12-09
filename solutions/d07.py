@@ -13,6 +13,7 @@ RE_OUTPUT_FILE = compile('([0-9]+) (.+)')
 
 class Node:
     def __init__(self, name: str, parent: Optional[Directory]):
+        self.size = 0
         self.name = name
         self.parent = parent
         if self.parent is not None:
@@ -23,6 +24,11 @@ class File(Node):
     def __init__(self, name: str, parent: Directory, size: int):
         super().__init__(name, parent)
         self.size = size
+
+        parent = self.parent
+        while parent is not None:
+            parent.size += self.size
+            parent = parent.parent
 
 
 class Directory(Node):
@@ -83,5 +89,16 @@ def make_tree(lines: Lines) -> Directory:
     return root
 
 
+def get_total(pwd: Directory, total: int, maximum: int) -> int:
+    if pwd.size <= maximum:
+        total += pwd.size
+    for node in pwd.children:
+        if isinstance(node, Directory):
+            total = get_total(node, total, maximum)
+    return total
+
+
 def solve(lines):
     root = make_tree(lines)
+    total = get_total(root, 0, 100_000)
+    return total
