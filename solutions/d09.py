@@ -49,25 +49,28 @@ def snake(h: Coord, t: Coord) -> Coord:
 
 
 def draw(h: Coord, t: Coord) -> str:
-    offset_x = min(h[0], t[0])
-    offset_y = min(h[1], t[1])
-    start = (offset_x, offset_y)
+    start = (0, 0)
 
-    h = add_coords(h, start)
-    t = add_coords(t, start)
+    offset_x = -min(start[0], h[0], t[0])
+    offset_y = -min(start[1], h[1], t[1])
+    offset = (offset_x, offset_y)
+
+    start = add_coords(start, offset)
+    h = add_coords(h, offset)
+    t = add_coords(t, offset)
 
     charset = {
-        h: 'H',
-        t: 'T',
-        start: 's'
+        's': start,
+        'T': t,
+        'H': h,
     }
 
-    width = max(h[0], t[0])
-    height = max(h[1], t[1])
+    width = max(start[0], h[0], t[0])
+    height = max(start[1], h[1], t[1])
 
-    grid = ['.' * width for _ in range(height)]
-    for coord, char in charset.items():
-        grid[coord[1]][coord[2]] = char
+    grid = [['.'] * (width + 1) for _ in range(height + 1)]
+    for char, coord in charset.items():
+        grid[coord[1]][coord[0]] = char
 
     drawn = '\n'.join(''.join(line) for line in grid)
     return drawn
@@ -86,9 +89,11 @@ def solve(lines):
         distance = int(m[2])
 
         for _ in range(distance):
+            print(draw(h, t))
+            print('-----')
+            input()
             h = add_coords(h, direction)
             t = snake(h, t)
-            print(draw(h, t))
             cache_visited(t, cache)
 
     visited = count_visited(cache)
