@@ -93,16 +93,18 @@ def make_tree(lines: Lines) -> Directory:
     return root
 
 
-def get_total(pwd: Directory, total: int, maximum: int) -> int:
-    if pwd.size <= maximum:
-        total += pwd.size
+def get_total(pwd: Directory, minimum: int, maximum: int) -> int:
+    if minimum <= pwd.size <= maximum:
+        maximum = pwd.size
     for node in pwd.children:
         if isinstance(node, Directory):
-            total = get_total(node, total, maximum)
-    return total
+            maximum = get_total(node, minimum, maximum)
+    return maximum
 
 
 def solve(lines):
     root = make_tree(lines)
-    total = get_total(root, 0, TOTAL_MAX_SIZE)
+    space_available = DISK_SIZE - root.size
+    free_up_needed = SPACE_REQUIRED - space_available
+    total = get_total(root, free_up_needed, DISK_SIZE)
     return total
