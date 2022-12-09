@@ -36,14 +36,15 @@ def snake(h: Coord, t: Coord) -> Coord:
 
     diff_abs = [abs(diffx), abs(diffy)]
     diff_abs.sort()
+    # none
+    if diff_abs in ([0, 0], [0, 1], [1, 1]):
+        move = (0, 0)
     # linear
-    if diff_abs == [0, 2]:
+    elif diff_abs == [0, 2]:
         move = (diffx // 2, diffy // 2)
     # diagonal
-    elif diff_abs == [1, 2]:
-        move = (diffx // abs(diffx), diffy // abs(diffy))
     else:
-        move = (0, 0)
+        move = (diffx // abs(diffx), diffy // abs(diffy))
 
     t = add_coords(t, move)
     return t
