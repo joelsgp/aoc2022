@@ -1,6 +1,3 @@
-from itertools import product
-
-
 def solve(lines):
     total_visible = 0
 
@@ -32,7 +29,6 @@ def solve(lines):
 
                 if ok:
                     total_visible += 1
-                    print(x, y)
                     break
 
     return total_visible
