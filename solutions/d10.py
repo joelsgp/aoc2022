@@ -11,6 +11,10 @@ PIXEL_DARK = ord('.')
 PIXEL_LIT = ord('#')
 
 
+# todo: decode crt output to get string
+#       would require asking others for their result to get a full character set?
+
+
 def tick(clock: int, x: int, framebuffer: bytearray):
     clock -= 1
     pen = clock % SCREEN_WIDTH
