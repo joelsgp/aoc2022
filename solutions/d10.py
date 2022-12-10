@@ -6,11 +6,15 @@ CYCLES_NOOP = 1
 CYCLES_ADDX = 2
 RELEVANT_CYCLES = list(range(20, 260, 40))
 SCREEN_WIDTH = 40
+SCREEN_SIZE = 240
+PIXEL_DARK = ord('.')
+PIXEL_LIT = ord('#')
 
 
 def tick(clock: int, x: int, framebuffer: bytearray):
-    if abs(clock - x) <= 1:
-        framebuffer[clock] = ord('#')
+    pen = clock - 1
+    if abs(pen - x) <= 1:
+        framebuffer[pen] = PIXEL_LIT
 
 
 def draw(framebuffer: bytearray) -> str:
@@ -24,7 +28,7 @@ def draw(framebuffer: bytearray) -> str:
 
 
 def solve(lines):
-    framebuffer = bytearray(b'.' * 240)
+    framebuffer = bytearray(PIXEL_DARK for _ in range(SCREEN_SIZE))
     x = 1
     clock = 0
 
