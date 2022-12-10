@@ -12,9 +12,10 @@ PIXEL_LIT = ord('#')
 
 
 def tick(clock: int, x: int, framebuffer: bytearray):
-    pen = clock - 1
+    clock -= 1
+    pen = clock % SCREEN_WIDTH
     if abs(pen - x) <= 1:
-        framebuffer[pen] = PIXEL_LIT
+        framebuffer[clock] = PIXEL_LIT
 
 
 def draw(framebuffer: bytearray) -> str:
