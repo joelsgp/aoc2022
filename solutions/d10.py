@@ -2,6 +2,8 @@ from re import compile
 
 
 RE_ADDX = compile(r'addx (?P<v>-?\d+)')
+CYCLES_NOOP = 1
+CYCLES_ADDX = 2
 RELEVANT_CYCLES = list(range(20, 260, 40))
 
 
@@ -17,12 +19,12 @@ def solve(lines):
     clock = 0
 
     for li in lines:
-        if li == 'nop':
-            clock += 1
+        if li == 'noop':
+            clock += CYCLES_NOOP
             total += signal_strength(clock, x)
         elif m := RE_ADDX.fullmatch(li):
             v = int(m['v'])
-            for _ in range(2):
+            for _ in range(CYCLES_ADDX):
                 clock += 1
                 total += signal_strength(clock, x)
             x += v
