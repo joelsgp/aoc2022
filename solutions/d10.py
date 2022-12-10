@@ -1,9 +1,13 @@
 from re import compile
 
 
-RE_ADDX = compile(r'addx (?P<v>-?\d+)')
-CYCLES_NOOP = 1
-CYCLES_ADDX = 2
+RE_NOOP = r'(?P<op>noop)'
+RE_ADDX = r'(?P<op>addx) (?P<v>-?\d+)'
+RE_LINE = compile(f'{RE_NOOP}|{RE_ADDX}')
+CYCLES = {
+    'noop': 1,
+    'addx': 2,
+}
 RELEVANT_CYCLES = list(range(20, 260, 40))
 SCREEN_WIDTH = 40
 SCREEN_SIZE = 240
@@ -38,14 +42,16 @@ def solve(lines):
     clock = 0
 
     for li in lines:
-        if li == 'noop':
-            clock += CYCLES_NOOP
+        m = RE_LINE.fullmatch(li)
+        op = m['op']
+        for _ in range(CYCLES[op]):
+            clock += 1
             tick(clock, x, framebuffer)
-        elif m := RE_ADDX.fullmatch(li):
+
+        if op == 'noop':
+            pass
+        elif op == 'addx':
             v = int(m['v'])
-            for _ in range(CYCLES_ADDX):
-                clock += 1
-                tick(clock, x, framebuffer)
             x += v
 
     frame = draw(framebuffer)
