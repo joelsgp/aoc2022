@@ -5,28 +5,39 @@ RE_ADDX = compile(r'addx (?P<v>-?\d+)')
 CYCLES_NOOP = 1
 CYCLES_ADDX = 2
 RELEVANT_CYCLES = list(range(20, 260, 40))
+SCREEN_WIDTH = 40
 
 
-def signal_strength(clock: int, x: int) -> int:
-    if clock in RELEVANT_CYCLES:
-        return clock * x
-    return 0
+def tick(clock: int, x: int, framebuffer: bytearray):
+    if abs(clock - x) <= 1:
+        framebuffer[clock] = ord('#')
+
+
+def draw(framebuffer: bytearray) -> str:
+    lines = []
+    for i in range(0, len(framebuffer), SCREEN_WIDTH):
+        li = framebuffer[i: i + SCREEN_WIDTH]
+        str_li = li.decode('utf-8')
+        lines.append(str_li)
+    frame = '\n'.join(lines)
+    return frame
 
 
 def solve(lines):
-    total = 0
+    framebuffer = bytearray(b'.' * 240)
     x = 1
     clock = 0
 
     for li in lines:
         if li == 'noop':
             clock += CYCLES_NOOP
-            total += signal_strength(clock, x)
+            tick(clock, x, framebuffer)
         elif m := RE_ADDX.fullmatch(li):
             v = int(m['v'])
             for _ in range(CYCLES_ADDX):
                 clock += 1
-                total += signal_strength(clock, x)
+                tick(clock, x, framebuffer)
             x += v
 
-    return total
+    frame = draw(framebuffer)
+    return frame
