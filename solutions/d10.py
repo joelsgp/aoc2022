@@ -1,8 +1,8 @@
 from re import compile
 
 
-RE_NOOP = r'(?P<op>noop)'
-RE_ADDX = r'(?P<op>addx) (?P<v>-?\d+)'
+RE_NOOP = r'(noop)'
+RE_ADDX = r'(addx) (-?\d+)'
 RE_LINE = compile(f'{RE_NOOP}|{RE_ADDX}')
 CYCLES = {
     'noop': 1,
@@ -43,7 +43,7 @@ def solve(lines):
 
     for li in lines:
         m = RE_LINE.fullmatch(li)
-        op = m['op']
+        op = m[1]
         for _ in range(CYCLES[op]):
             clock += 1
             tick(clock, x, framebuffer)
@@ -51,7 +51,7 @@ def solve(lines):
         if op == 'noop':
             pass
         elif op == 'addx':
-            v = int(m['v'])
+            v = int(m[2])
             x += v
 
     frame = draw(framebuffer)
