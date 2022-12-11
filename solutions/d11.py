@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from re import compile
+import re
 from typing import Callable
 
 
 class Monkey:
-    re_block = compile(
+    re_block = re.compile(
         r"""Monkey (?P<num>\d+):
  {2}Starting items: (?P<starting>(\d+, )*\d+)
  {2}Operation: new = old (?P<op>[+*]) (?P<c>\d+)
@@ -13,7 +13,6 @@ class Monkey:
  {4}If true: throw to monkey (?P<tt>\d+)
  {4}If false: throw to monkey (?P<tf>\d+)"""
     )
-    re_starting = compile(r'(?:(\d+), )*(\d+)')
 
     def __init__(
             self, num: int,
@@ -32,10 +31,7 @@ class Monkey:
         block = '\n'.join(lines)
         m = cls.re_block.fullmatch(block)
 
-        starting_unparsed = m['starting']
-        starting_match = cls.re_starting.fullmatch(starting_unparsed)
-        starting_groups = starting_match.groups()
-        starting = [int(x) for x in starting_groups]
+        starting = [int(x) for x in m['starting'].split(', ')]
         op = m['op']
         c = m['c']
         if op == '+':
