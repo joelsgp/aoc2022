@@ -8,6 +8,7 @@ Operation = Callable[[int], int]
 
 
 ROUNDS = 20
+POST_INSPECTION_DIVISOR = 3
 
 
 class Monkey:
@@ -97,7 +98,7 @@ def solve(lines):
             for item in m.held:
                 item = m.operation(item)
                 m.inspections += 1
-                item = item // 3
+                item = item // POST_INSPECTION_DIVISOR
                 target = m.get_target(item)
                 if target == m.num:
                     new_held.append(item)
