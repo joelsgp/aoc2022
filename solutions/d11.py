@@ -7,6 +7,9 @@ from typing import Callable
 Operation = Callable[[int], int]
 
 
+ROUNDS = 20
+
+
 class Monkey:
     re_block = re.compile(
         r"Monkey (?P<num>\d+):\n"
@@ -26,12 +29,24 @@ class Monkey:
             starting: list[int], operation: Operation,
             divisor: int, target_true: int, target_false: int
     ):
+        self.inspections = 0
+
         self.num = num
         self.held = starting
         self.operation = operation
         self.divisor = divisor
         self.target_true = target_true
         self.target_false = target_false
+
+    def __lt__(self, other):
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return self.num < other.num
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return self.num == other.num
 
     @classmethod
     def get_operation(cls, m: re.Match) -> Operation:
@@ -70,4 +85,9 @@ def solve(lines):
             monkey_lines.append(li)
 
     # todo
-    return
+
+    inspections = [m.inspections for m in monkeys]
+    inspections.sort(reverse=True)
+    monkey_business = inspections[0] * inspections[1]
+
+    return monkey_business
