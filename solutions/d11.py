@@ -6,15 +6,12 @@ from typing import Callable
 
 class Monkey:
     re_block = re.compile(
-        r"""
-        Monkey\ (?P<num>\d+):\n
-        \ {2}Starting\ items:\ (?P<starting>(\d+,\ )*\d+)\n
-        \ {2}Operation:\ new\ =\ old\ (?P<op>[+*])\ (?P<c>\d+|old)\n
-        \ {2}Test:\ divisible\ by\ (?P<div>\d+)\n
-        \ {4}If\ true:\ throw\ to\ monkey\ (?P<tt>\d+)\n
-        \ {4}If\ false:\ throw\ to\ monkey\ (?P<tf>\d+)
-        """,
-        re.VERBOSE
+        r"Monkey (?P<num>\d+):\n"
+        r" {2}Starting items: (?P<starting>(\d+, )*\d+)\n"
+        r" {2}Operation: new = old (?P<op>[+*]) (?P<c>\d+|old)\n"
+        r" {2}Test: divisible by (?P<div>\d+)\n"
+        r" {4}If true: throw to monkey (?P<tt>\d+)\n"
+        r" {4}If false: throw to monkey (?P<tf>\d+)"
     )
     ops = {
         '+': lambda x, y: x + y,
