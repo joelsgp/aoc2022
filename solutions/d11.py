@@ -82,6 +82,7 @@ class Monkey:
 def solve(lines):
     monkeys = []
     monkey_lines = []
+    lines.append('')
     for li in lines:
         if not li:
             new_monkey = Monkey.new(monkey_lines)
