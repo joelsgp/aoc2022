@@ -4,6 +4,9 @@ import re
 from typing import Callable
 
 
+Operation = Callable[[int], int]
+
+
 class Monkey:
     re_block = re.compile(
         r"Monkey (?P<num>\d+):\n"
@@ -20,7 +23,7 @@ class Monkey:
 
     def __init__(
             self, num: int,
-            starting: list[int], operation: Callable[[int], int],
+            starting: list[int], operation: Operation,
             divisor: int, target_true: int, target_false: int
     ):
         self.num = num
@@ -31,22 +34,25 @@ class Monkey:
         self.target_false = target_false
 
     @classmethod
+    def get_operation(cls, m: re.Match) -> Operation:
+        op = cls.ops[m['op']]
+        c = m['c']
+        if c == 'old':
+            return lambda x: op(x, x)
+        else:
+            c = int(c)
+            return lambda x: op(x, c)
+
+    @classmethod
     def new(cls, lines: list[str]) -> Monkey:
         block = '\n'.join(lines)
         m = cls.re_block.fullmatch(block)
 
         starting = [int(x) for x in m['starting'].split(', ')]
-        op = cls.ops[m['op']]
-        c = m['c']
-        if c == 'old':
-            operation = lambda x: op(x, x)
-        else:
-            c = int(c)
-            operation = lambda x: op(x, c)
 
         instance = cls(
             m['num'],
-            starting, operation,
+            starting, cls.get_operation(m),
             m['div'], m['tt'], m['tf']
         )
         return instance
