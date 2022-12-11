@@ -8,11 +8,15 @@ class Monkey:
     re_block = re.compile(
         r"""Monkey (?P<num>\d+):
  {2}Starting items: (?P<starting>(\d+, )*\d+)
- {2}Operation: new = old (?P<op>[+*]) (?P<c>\d+)
+ {2}Operation: new = old (?P<op>[+*]) (?P<c>\d+|old)
  {2}Test: divisible by (?P<div>\d+)
  {4}If true: throw to monkey (?P<tt>\d+)
  {4}If false: throw to monkey (?P<tf>\d+)"""
     )
+    ops = {
+        '+': lambda x, y: x + y,
+        '*': lambda x, y: x * y,
+    }
 
     def __init__(
             self, num: int,
@@ -32,12 +36,13 @@ class Monkey:
         m = cls.re_block.fullmatch(block)
 
         starting = [int(x) for x in m['starting'].split(', ')]
-        op = m['op']
+        op = cls.ops[m['op']]
         c = m['c']
-        if op == '+':
-            operation = lambda x: x + c
-        elif op == '*':
-            operation = lambda x: x * c
+        if c == 'old':
+            operation = lambda x: op(x, x)
+        else:
+            c = int(c)
+            operation = lambda x: op(x, c)
 
         instance = cls(
             m['num'],
@@ -57,3 +62,5 @@ def solve(lines):
             monkey_lines = []
         else:
             monkey_lines.append(li)
+
+    return
