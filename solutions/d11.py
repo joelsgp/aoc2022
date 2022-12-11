@@ -7,8 +7,8 @@ from typing import Callable
 Operation = Callable[[int], int]
 
 
-ROUNDS = 20
-POST_INSPECTION_DIVISOR = 3
+ROUNDS = 10_000
+POST_INSPECTION_DIVISOR = 1
 
 
 class Monkey:
