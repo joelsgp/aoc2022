@@ -66,9 +66,9 @@ class Monkey:
         starting = [int(x) for x in m['starting'].split(', ')]
 
         instance = cls(
-            m['num'],
+            int(m['num']),
             starting, cls.get_operation(m),
-            m['div'], m['tt'], m['tf']
+            int(m['div']), int(m['tt']), int(m['tf'])
         )
         return instance
 
