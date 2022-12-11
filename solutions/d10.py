@@ -3,6 +3,7 @@ from re import compile
 
 RE_NOOP = r'(noop)'
 RE_ADDX = r'(addx) (-?\d+)'
+# todo: fix
 RE_LINE = compile(f'{RE_NOOP}|{RE_ADDX}')
 CYCLES = {
     'noop': 1,
