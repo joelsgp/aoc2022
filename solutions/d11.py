@@ -6,13 +6,14 @@ from typing import Callable
 
 class Monkey:
     re_block = compile(
-        r"""Monkey (P<num>\d+):
- {2}Starting items: (P<repeat>(\d+), )*(P<final>\d+)
- {2}Operation: new = old (P<op>\+|\*) (P<c>\d+)
- {2}Test: divisible by (P<div>\d+)
- {4}If true: throw to monkey (P<tt>\d+)
- {4}If false: throw to monkey (P<tf>\d+)"""
+        r"""Monkey (?P<num>\d+):
+ {2}Starting items: (?P<starting>(\d+, )*\d+)
+ {2}Operation: new = old (?P<op>[+*]) (?P<c>\d+)
+ {2}Test: divisible by (?P<div>\d+)
+ {4}If true: throw to monkey (?P<tt>\d+)
+ {4}If false: throw to monkey (?P<tf>\d+)"""
     )
+    re_starting = compile(r'(?:(\d+), )*(\d+)')
 
     def __init__(
             self, num: int,
@@ -31,7 +32,10 @@ class Monkey:
         block = '\n'.join(lines)
         m = cls.re_block.fullmatch(block)
 
-        starting = m['repeat'] + [m['final']]
+        starting_unparsed = m['starting']
+        starting_match = cls.re_starting.fullmatch(starting_unparsed)
+        starting_groups = starting_match.groups()
+        starting = [int(x) for x in starting_groups]
         op = m['op']
         c = m['c']
         if op == '+':
