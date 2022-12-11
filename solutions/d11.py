@@ -72,6 +72,12 @@ class Monkey:
         )
         return instance
 
+    def get_target(self, item: int) -> int:
+        if item % self.divisor == 0:
+            return self.target_true
+        else:
+            return self.target_false
+
 
 def solve(lines):
     monkeys = []
@@ -84,7 +90,19 @@ def solve(lines):
         else:
             monkey_lines.append(li)
 
-    # todo
+    for _ in range(ROUNDS):
+        for m in monkeys:
+            new_held = []
+            for item in m.held:
+                item = m.operation(item)
+                m.inspections += 1
+                item = item // 3
+                target = m.get_target(item)
+                if target == m.num:
+                    new_held.append(item)
+                else:
+                    monkeys[target].held.append(item)
+            m.held = new_held
 
     inspections = [m.inspections for m in monkeys]
     inspections.sort(reverse=True)
