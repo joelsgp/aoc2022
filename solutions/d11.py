@@ -8,7 +8,7 @@ Operation = Callable[[int], int]
 
 
 ROUNDS = 10_000
-POST_INSPECTION_DIVISOR = 1
+POST_INSPECTION_DIVISOR = 3
 
 
 class Monkey:
@@ -93,6 +93,7 @@ def solve(lines):
             monkey_lines.append(li)
 
     for _ in range(ROUNDS):
+        print(_)
         for m in monkeys:
             new_held = []
             for item in m.held:
@@ -100,6 +101,12 @@ def solve(lines):
                 m.inspections += 1
                 item = item // POST_INSPECTION_DIVISOR
                 target = m.get_target(item)
+                item %= m.divisor
+                if item == 0:
+                    target = m.target_true
+                else:
+                    target = m.target_false
+
                 if target == m.num:
                     new_held.append(item)
                 else:
