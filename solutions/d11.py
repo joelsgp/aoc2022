@@ -101,11 +101,6 @@ def solve(lines):
                 m.inspections += 1
                 item = item // POST_INSPECTION_DIVISOR
                 target = m.get_target(item)
-                item %= m.divisor
-                if item == 0:
-                    target = m.target_true
-                else:
-                    target = m.target_false
 
                 if target == m.num:
                     new_held.append(item)
