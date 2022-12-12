@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from functools import reduce
 from typing import Callable
 
 
@@ -103,14 +104,23 @@ def parse_lines(lines: list[str]) -> list[Monkey]:
     return monkeys
 
 
+def get_lcm(monkeys: list[Monkey]) -> int:
+    divisors = [m.divisor for m in monkeys]
+    lcm = reduce(lambda x, y: x * y, divisors)
+    return lcm
+
+
 def solve(lines):
     monkeys = parse_lines(lines)
+    lcm = get_lcm(monkeys)
 
     for _ in range(ROUNDS):
         print(_)
         for m in monkeys:
             new_held = []
             for item in m.held:
+                item %= lcm
+
                 item = m.operation(item)
                 m.inspections += 1
                 item = item // POST_INSPECTION_DIVISOR
