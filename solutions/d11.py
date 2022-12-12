@@ -8,7 +8,7 @@ Operation = Callable[[int], int]
 
 
 ROUNDS = 10_000
-POST_INSPECTION_DIVISOR = 3
+POST_INSPECTION_DIVISOR = 1
 
 
 class Monkey:
