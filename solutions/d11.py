@@ -80,7 +80,15 @@ class Monkey:
             return self.target_false
 
 
-def solve(lines):
+def get_monkey_business(monkeys: list[Monkey]) -> int:
+    inspections = [m.inspections for m in monkeys]
+    inspections.sort(reverse=True)
+    monkey_business = inspections[0] * inspections[1]
+
+    return monkey_business
+
+
+def parse_lines(lines: list[str]) -> list[Monkey]:
     monkeys = []
     monkey_lines = []
     lines.append('')
@@ -91,6 +99,12 @@ def solve(lines):
             monkey_lines = []
         else:
             monkey_lines.append(li)
+
+    return monkeys
+
+
+def solve(lines):
+    monkeys = parse_lines(lines)
 
     for _ in range(ROUNDS):
         print(_)
@@ -108,8 +122,5 @@ def solve(lines):
                     monkeys[target].held.append(item)
             m.held = new_held
 
-    inspections = [m.inspections for m in monkeys]
-    inspections.sort(reverse=True)
-    monkey_business = inspections[0] * inspections[1]
-
+    monkey_business = get_monkey_business(monkeys)
     return monkey_business
